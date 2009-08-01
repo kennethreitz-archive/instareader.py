@@ -13,8 +13,8 @@ class GoogleReader:
         self.login = login
         self.password = password
         self.authurl = "https://www.google.com/accounts/ClientLogin"
-        self.sid = ""
-        self.re_username = re.compile("Auth=")
+        self.re_auth = re.compile("Auth=")
+        self.sid = self.authenticate(self.login,self.password)
         
     def authenticate(self,login,password):
         ''' method to authenticate to google'''
@@ -23,7 +23,10 @@ class GoogleReader:
         headerdata = urllib.urlencode(parameters)
         try:
             request = urllib2.Request(self.authurl, headerdata)
-            response = urllib2.urlopen(request).read()
-            return response
+            response = urllib2.urlopen(request).read().split("\n")
+            for r in response:
+                if self.re_auth.match(r):
+                    return r.split("=")[1]
         except IOError, e:
+            print e
             return -1
