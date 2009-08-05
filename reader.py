@@ -7,6 +7,8 @@ import urllib
 import urllib2
 import re
 
+from xml.dom.minidom import parseString
+
 class GoogleReader:
     ''' class for connecting to google'''
     def __init__(self, login, password):
@@ -44,7 +46,9 @@ class GoogleReader:
         return header
         
     def get_starred_items(self,header,sid=False):
-        ''' method to get starred items from google reader '''
+        ''' method to get starred items from google reader 
+            returns a DOM document object
+        '''
         if sid:
             id = sid
         else:
@@ -53,7 +57,7 @@ class GoogleReader:
         try:
             request = urllib2.Request(starred_url, None, header)
             response = urllib2.urlopen(request).read()
-            return response
+            return parseString(response)
         except IOError, e:
             print e
             return -1
