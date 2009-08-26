@@ -6,8 +6,7 @@
 import urllib
 import urllib2
 import re
-
-from xml.dom.minidom import parseString
+import xml.dom.minidom
 
 class GoogleReader:
     ''' class for connecting to google'''
@@ -19,6 +18,7 @@ class GoogleReader:
         self.sid = self.authenticate(self.login,self.password)
         self.header = {}
         self.header = self.create_header(self.header,self.sid)
+        self.items = []
         
     def authenticate(self,login,password):
         ''' method to authenticate to google'''
@@ -47,7 +47,11 @@ class GoogleReader:
         
     def get_starred_items(self,header,sid=False):
         ''' method to get starred items from google reader 
-            returns a DOM document object
+            returns a list of hashmaps of the form
+            item = { 
+                    'title' : "foo",
+        	        'url' : "bla"
+        	       }
         '''
         if sid:
             id = sid
@@ -57,7 +61,16 @@ class GoogleReader:
         try:
             request = urllib2.Request(starred_url, None, header)
             response = urllib2.urlopen(request).read()
-            return parseString(response)
+            dom = xml.dom.minidom.parseString(response)
+            entries = dom.getElementsByTagName("entry")
+            for e in entries:
+                item = { 'title' : "", 'url' : "" }
+                title =  e.getElementsByTagName("title")[0].firstChild.data.encode("utf-8")
+                item['title'] = title
+                links = e.getElementsByTagName("link")
+                item['url'] = links[0].getAttribute("href")
+                self.items.append(item)
+            return self.items
         except IOError, e:
             print e
             return -1
