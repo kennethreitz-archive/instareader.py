@@ -61,4 +61,17 @@ class GoogleReader:
         except IOError, e:
             print e
             return -1
-        
+
+    def get_subscription_list(self, header):
+        ''' Generic Method for getting data from google reader
+        '''
+        url = 'http://www.google.com/reader/api/0/subscription/list'
+        # retrieve data here
+        try:
+            request = urllib2.Request(url, None, header)
+            response = urllib2.urlopen(request).read()
+            return response
+        except IOError, e:
+            print e
+            return -1
+
