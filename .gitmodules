@@ -1,0 +1,3 @@
+[submodule "InstapaperLibrary"]
+	path = InstapaperLibrary
+	url = git://github.com/mrtazz/InstapaperLibrary.git
