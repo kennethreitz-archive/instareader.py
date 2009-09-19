@@ -30,9 +30,10 @@ class GoogleReader:
         parameters = {  'Email' : login,
                         'Passwd' : password,
                         'accountType' : 'HOSTED_OR_GOOGLE',
-                        'service' : 'reader', 
+                        'service' : 'reader',
                         'source' : 'googlereader2instapaper',
-                        'continue': 'http://www.google.com' }
+                        'continue': 'http://www.google.com'
+                     }
         headerdata = urllib.urlencode(parameters)
         try:
             request = urllib2.Request(self.auth_url, headerdata)
@@ -50,35 +51,50 @@ class GoogleReader:
         header['Cookie'] = 'Name=SID;SID=%s;Domain=.google.com;Path=/;Expires=160000000000' % sid
         return header
         
-    def get_starred_items(self,header,sid=False):
+    def get_starred_items(self,count=60,header=None):
         ''' method to get starred items from google reader 
             returns a list of hashmaps of the form
             item = { 
                     'title' : "foo",
         	        'url' : "bla"
+        	        'item' : "baz"
+        	        'feed' : "bar"
         	       }
         '''
-        if sid:
-            id = sid
-        else:
-            id = self.sid
-        starred_url = "http://www.google.com/reader/atom/user/-/state/com.google/starred"
+        if header is None:
+            header = self.header
+
+        print count
+        params = {
+                    'n' : count,
+                 }
+
+        starred_base_url = "http://www.google.com/reader/atom/user/-/state/com.google/starred"
+        starred_url = starred_base_url + '?' + urllib.urlencode(params)
         try:
             request = urllib2.Request(starred_url, None, header)
             response = urllib2.urlopen(request).read()
             dom = xml.dom.minidom.parseString(response)
-            entries = dom.getElementsByTagName("entry")
-            for e in entries:
-                item = { 'title' : "", 'url' : "" }
-                title =  e.getElementsByTagName("title")[0].firstChild.data.encode("utf-8")
-                item['title'] = title
-                links = e.getElementsByTagName("link")
-                item['url'] = links[0].getAttribute("href")
-                self.items.append(item)
-            return self.items
+            try:
+                entries = dom.getElementsByTagName("entry")
+                for e in entries:
+                    item = { 'title' : "", 'url' : "" }
+                    title =  e.getElementsByTagName("title")[0].firstChild.data.encode("utf-8")
+                    item['title'] = title
+                    links = e.getElementsByTagName("link")
+                    item['url'] = links[0].getAttribute("href")
+                    item_id = e.getElementsByTagName("id")
+                    item['item'] = item_id[0].firstChild.data.encode("utf-8")
+                    source = e.getElementsByTagName("source")
+                    item['feed'] = source[0].getAttribute("gr:stream-id")
+                    self.items.append(item)
+                return self.items
+            except ExpatError, er:
+                print er
+                return -2
         except IOError, e:
             print e
-            return -1
+            return -2
 
     def get_subscription_list(self, header):
         ''' Generic Method for getting data from google reader
