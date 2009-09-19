@@ -7,6 +7,7 @@ import urllib
 import urllib2
 import re
 import xml.dom.minidom
+import sys
 
 class GoogleReader:
     ''' class for connecting to google'''
@@ -16,6 +17,10 @@ class GoogleReader:
         self.auth_url = "https://www.google.com/accounts/ClientLogin"
         self.re_auth = re.compile("SID=")
         self.sid = self.authenticate(self.login,self.password)
+        if self.sid == -1:
+            print "Authentication unsuccessful. Exiting."
+            sys.exit(-1)
+
         self.header = {}
         self.header = self.create_header(self.header,self.sid)
         self.items = []
@@ -36,7 +41,7 @@ class GoogleReader:
                 if self.re_auth.match(r):
                     return r.split("=")[1]
         except IOError, e:
-            print e
+            print "Authenticate error %s" % e
             return -1
     
     def create_header(self, header, sid):
@@ -86,5 +91,5 @@ class GoogleReader:
             return response
         except IOError, e:
             print e
-            return -1
+            return -5
 
