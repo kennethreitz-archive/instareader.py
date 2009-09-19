@@ -96,6 +96,48 @@ class GoogleReader:
             print e
             return -2
 
+
+    def remove_starred_item(self,item,feed,header=None):
+        """ Method to remove the starred status from a reader item
+        """
+        if header is None:
+            header = self.header
+        # Get edit token
+        token = self.get_edit_token()
+        post_args = {
+                        'client' : 'python',
+                        'r'      : 'user/-/state/com.google/starred',
+                        'async'  : 'true',
+                        's'      : feed,
+                        'i'      : item,
+                        'T'      : token
+                    }
+        # Basic edit url
+        edit_base_url = "http://www.google.com/reader/api/0/edit-tag"
+        edit_params = urllib.urlencode(post_args)
+        #edit_url = edit_base_url + '?' + edit_params
+        try:
+            request = urllib2.Request(edit_base_url, edit_params, header)
+            response = urllib2.urlopen(request).read()
+            return response
+        except IOError, e:
+            print "Remove starred item error: %s" % e
+            return -3
+
+    def get_edit_token(self,header=None):
+        """method for get_edit_token"""
+        token_url = "http://www.google.com/reader/api/0/token"
+        if header is None:
+            header = self.header
+
+        try:
+            request = urllib2.Request(token_url, None, header)
+            response = urllib2.urlopen(request).read()
+            return response
+        except IOError, e:
+            print "Get token error: %s" % e
+            return -4
+
     def get_subscription_list(self, header):
         ''' Generic Method for getting data from google reader
         '''
