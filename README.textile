@@ -1,11 +1,8 @@
 h2. README
 
 This is a bridge, which imports starred items from google reader to instapaper. It can basically used like this:
-@
 
-#
-# 
-#
+bc..  
 import reader
 import InstapaperLibrary.instapaper
 
@@ -25,4 +22,5 @@ def add_starred_items_to_instapaper():
 
 if __name__ == "__main__":
     main()
-@ 
+
+p. There are still some issues to fix like the fix number of items to fetch
