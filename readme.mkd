@@ -1,9 +1,13 @@
 Instareader.py
 ======
 
-Instapaper is hungry for Google Reader Stars. 
+Instapaper is hungry for Google Reader Stars. It needs spoon.
 
-This is the spoon. 
+This is that spoon. 
+
+Why?
+----
+Throughout the day, I access from Google Reader from my work computer, laptop, iPhone, iPad, etc. I find articles all the time that I'd love to take the time to read, but simply don't have the time at the moment. I'm also a heavy user of Instapaper. Now I add a star to a post, and I don't miss a thing.
 
 Installation
 ------------
@@ -12,7 +16,7 @@ Installation
 	sudo curl http://github.com/kennethreitz/instareader.py/raw/master/instareader.py -o /usr/bin/instareader
 	sudo chmod +x /usr/bin/instareader
 		
-Stick it on a server's `/etc/crontab` and you're golden!
+`cron` it up and you're golden.
 
 
 Usage
