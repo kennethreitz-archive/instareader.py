@@ -1,7 +1,10 @@
 Google Reader's Starred Items to Instapaper 
 ======
 
-This script imports starred items from Google Reader to Instapaper. Oh hell yes. Of course this isn't really needed now, since Instapaper's bookmarklet fully supports Google Reader. It's still nice to have though.
+This script imports starred items from Google Reader to Instapaper.
+
+Oh hell yes. 
+
 
 Installation
 ------------
