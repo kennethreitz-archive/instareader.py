@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-""" InstaReader.py -- Feeds Instapaper with Google Stars. Yum.
+""" InstaReader.py -- Feeds Instapaper with Google Stars. Google makes the best Stars.
 """
 
 from opster import command
-
 import xml.dom.minidom
 import sys, urllib, urllib2, re
 
@@ -35,7 +34,7 @@ class Instapaper:
 			return -1
 			
 class GoogleReader:
-	''' Simple Google Reader wrapper'''
+	''' Simple Google Reader API wrapper'''
 	def __init__(self, login, password):
 		self.login = login
 		self.password = password
@@ -71,7 +70,7 @@ class GoogleReader:
 			return -1
 
 	def create_header(self, header, sid):
-		''' Method to create the header which is used afterwards for authentication '''
+		''' Create the authentication header '''
 		header = {'User-agent' : 'python'}
 		header['Cookie'] = 'Name=SID;SID=%s;Domain=.google.com;Path=/;Expires=160000000000' % sid
 		return header
