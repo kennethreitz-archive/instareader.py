@@ -1,10 +1,9 @@
-InstaReader 
+Instareader.py
 ======
 
-This script imports starred items from Google Reader to Instapaper.
+Instapaper is hungry for Google Reader Stars. 
 
-Oh hell yes. 
-
+This is the spoon. 
 
 Installation
 ------------
