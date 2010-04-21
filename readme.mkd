@@ -1,0 +1,40 @@
+README
+======
+
+This script imports starred items from Google Reader to Instapaper. Hell yes.
+
+
+Installation
+------------
+
+	git clone git://github.com/kennethreitz/instareader.py.git 
+	cd instareader.py
+	git submodule init
+	git submodule update
+	
+Stick it in `/etc/crontab/` and you're golden!
+
+
+Usage
+------
+
+	import reader
+	import InstapaperLibrary.instapaper
+
+	def main():
+	    add_starred_items_to_instapaper()
+    
+	def add_starred_items_to_instapaper():
+	    """docstring for add_starred_item_to_instapaper"""
+	    gr = reader.GoogleReader(GOOGLELOGIN,GOOGLEPASSWORD})
+	    instapaper = InstapaperLibrary.instapaper.Instapaper(INSTAPAPERLOGIN,INSTAPAPERPASSWORD)
+	    items = gr.get_starred_items(count='100',header=gr.header)
+	    # get items in the right temporal order
+	    items.reverse() 
+	    for i in items:
+	        instapaper.addItem(i['url'],i['title'])
+	        gr.remove_starred_item(item=i['item'],feed=i['feed'])
+
+	if __name__ == "__main__":
+	    main()
+
