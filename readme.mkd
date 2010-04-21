@@ -1,4 +1,4 @@
-Google Reader's Starred Items to Instapaper 
+InstaReader 
 ======
 
 This script imports starred items from Google Reader to Instapaper.
