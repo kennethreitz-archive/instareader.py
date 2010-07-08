@@ -39,21 +39,21 @@ class GoogleReader:
 		self.login = login
 		self.password = password
 		self.auth_url = "https://www.google.com/accounts/ClientLogin"
-		self.re_auth = re.compile("SID=")
-		self.sid = self.authenticate(self.login,self.password)
-		if self.sid == -1:
+		self.re_auth = re.compile("Auth=")
+		self.auth = self.authenticate(self.login,self.password)
+		if self.auth == -1:
 			print "Authentication unsuccessful. Exiting."
 			sys.exit(-1)
 
 		self.header = {}
-		self.header = self.create_header(self.header,self.sid)
+		self.header = self.create_header(self.header,self.auth)
 		self.items = []
-
+    
 	def authenticate(self,login,password):
 		''' method to authenticate to google'''
 		parameters = {	'Email' : login,
 						'Passwd' : password,
-						'accountType' : 'HOSTED_OR_GOOGLE',
+						'accountType' : 'GOOGLE',
 						'service' : 'reader',
 						'source' : 'googlereader2instapaper',
 						'continue': 'http://www.google.com'
@@ -69,10 +69,9 @@ class GoogleReader:
 			print "Authenticate error %s" % e
 			return -1
 
-	def create_header(self, header, sid):
+	def create_header(self, header, auth):
 		''' Create the authentication header '''
-		header = {'User-agent' : 'python'}
-		header['Cookie'] = 'Name=SID;SID=%s;Domain=.google.com;Path=/;Expires=160000000000' % sid
+		header['Authorization'] = 'GoogleLogin auth=%s' % auth
 		return header
 
 	def get_starred_items(self,count=60,header=None):
@@ -88,7 +87,6 @@ class GoogleReader:
 		if header is None:
 			header = self.header
 
-		print count
 		params = {
 					'n' : count,
 				 }
